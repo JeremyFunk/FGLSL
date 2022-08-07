@@ -45,6 +45,9 @@
     <None Include="single_if_else.comp">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="if_define_include.comp">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="validate.cpp">

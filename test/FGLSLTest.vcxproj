@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="define.comp" />
+    <None Include="if_define_include.comp" />
     <None Include="include_part.comp" />
     <None Include="include_test.comp" />
     <None Include="multi_define.comp" />

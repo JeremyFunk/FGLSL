@@ -1,0 +1,16 @@
+#version 330
+
+//$IF LIGHTS
+struct Light{
+    vec3 color;
+};
+//$INCLUDE include_part.comp
+//$DEFINE LIGHT_COUNT $LIGHT_COUNT
+//$ELSE
+//$INCLUDE multi_include_part.comp
+uniform float test;
+//$END_IF
+
+void main(){
+    
+}

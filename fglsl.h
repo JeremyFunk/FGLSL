@@ -9,7 +9,7 @@ namespace FGLSL {
     enum PreprocessFlags : unsigned int {
         NONE = 0,
         ABSOLUTE_PATH = 1 << 0,
-        OUTPUT_COMPILED_SHADERS = 1 << 1,
+        //OUTPUT_COMPILED_SHADERS = 1 << 1,
     };
     namespace Internal {
         inline void _ltrim(std::string& s) {
@@ -155,7 +155,7 @@ namespace FGLSL {
 
                     if (token == "INCLUDE") {
                         std::string shader = l.substr(l.find(" ") + 1);
-                        auto curDir = directory.append(shader);
+                        auto curDir = std::filesystem::path(directory).append(shader);
                         for (auto cl : Resolve(ReadShader(curDir), curDir.parent_path())) {
                             result.push_back(cl);
                         }
@@ -322,7 +322,7 @@ namespace FGLSL {
                 if (!found)
                     settings.push_back(GLSLTokenSetting(name, value));
             }
-            void SetConditional(std::string name, bool value) {
+            void SetCondition(std::string name, bool value) {
                 bool found = false;
                 for (auto& s : conditional_settings) {
                     if (s.name == name) {
@@ -420,7 +420,7 @@ namespace FGLSL {
     };
 
     // Takes the path to the entry shader.
-    Internal::FGLSLShader Preprare(std::filesystem::path entry, PreprocessFlags flags = PreprocessFlags::NONE) {
+    Internal::FGLSLShader LoadFGLSL(std::filesystem::path entry, PreprocessFlags flags = PreprocessFlags::NONE) {
         using namespace Internal;
         if (!(flags & PreprocessFlags::ABSOLUTE_PATH)) {
             entry = std::filesystem::current_path().append(entry.string());
@@ -554,7 +554,7 @@ namespace FGLSL {
                                     if (cond.active && range.else_p != -1 && range.else_p <= i) {
                                         disabled = true;
                                     }
-                                    if (!cond.active && ( range.else_p >= i || range.else_p == -1)) {
+                                    if (!cond.active && (range.else_p >= i || range.else_p == -1)) {
                                         disabled = true;
                                     }
                                     break;

@@ -4,6 +4,11 @@
 struct Light{
     vec3 color;
 };
+//$IF LIGHTS2
+struct DirLight{
+    vec3 pos;
+};
+//$END_IF
 //$ELSE
 struct Light{
     vec3 color;
