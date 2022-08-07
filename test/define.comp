@@ -1,6 +1,6 @@
 #version 330
 
-//$define TEST_COUNT $TEST_COUNT
+//$DEFINE TEST_COUNT $TEST_COUNT
 
 void main(){
 

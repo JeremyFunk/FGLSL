@@ -1,0 +1,16 @@
+#version 330
+
+//$IF LIGHTS
+struct Light{
+    vec3 color;
+};
+//$ELSE
+struct Light{
+    vec3 color;
+    float falloff;
+};
+//$END_IF
+
+void main(){
+    
+}

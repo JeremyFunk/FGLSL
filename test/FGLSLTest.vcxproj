@@ -146,9 +146,11 @@
     <None Include="include_test.comp" />
     <None Include="multi_define.comp" />
     <None Include="multi_if.comp" />
+    <None Include="multi_if_else.comp" />
     <None Include="multi_include_part.comp" />
     <None Include="multi_include_test.comp" />
     <None Include="single_if.comp" />
+    <None Include="single_if_else.comp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="validate.cpp" />

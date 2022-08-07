@@ -39,6 +39,12 @@
     <None Include="multi_include_test.comp">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="multi_if_else.comp">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="single_if_else.comp">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="validate.cpp">

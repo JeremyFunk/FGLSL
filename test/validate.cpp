@@ -369,6 +369,394 @@ int main() {
         assert(fshader->code.length() == 32);
     }
 
+
+
+
+
+
+
+
+
+
+
+
+    // SINGLE CONDITIONAL IF_ELSE
+    {
+        auto fglsl = FGLSL::Preprare("single_if_else.comp");
+
+        fglsl.SetCondition("LIGHTS", true);
+        auto shaders = FGLSL::GenerateShaders(fglsl);
+        assert(shaders.shaders.size() == 1);
+        assert(shaders.shaders[0].code.length() == 69);
+
+        auto fshader = shaders.GetShader();
+        assert(fshader == NULL);
+
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 69);
+
+        shaders.SetConditional("LIGHTSS", true);
+        shaders.SetConditional("LIGHT", false);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 69);
+
+
+
+        fglsl.ClearValues();
+        fglsl.SetCondition("LIGHTS", false);
+        shaders = FGLSL::GenerateShaders(fglsl);
+        assert(shaders.shaders.size() == 1);
+        assert(shaders.shaders[0].code.length() == 88);
+
+        fshader = shaders.GetShader();
+        assert(shaders.shaders.size() == 1);
+        assert(fshader->code.length() == 88);
+
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(shaders.shaders.size() == 1);
+        assert(fshader->code.length() == 88);
+
+
+
+        fglsl.ClearValues();
+        shaders = FGLSL::GenerateShaders(fglsl);
+        assert(shaders.shaders.size() == 1);
+        assert(shaders.shaders[0].code.length() == 88);
+
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 88);
+
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 88);
+
+
+        fglsl.ClearValues();
+        fglsl.SetCondition("LIGHTS", true);
+        fglsl.SetCondition("LIGHTS", false);
+        shaders = FGLSL::GenerateShaders(fglsl);
+        assert(shaders.shaders.size() == 2);
+        assert(shaders.shaders[0].code.length() == 69);
+        assert(shaders.shaders[1].code.length() == 88);
+
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 88);
+
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 69);
+
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 88);
+    }
+    // MULTI CONDITIONAL
+
+    {
+        auto fglsl = FGLSL::Preprare("multi_if_else.comp");
+        auto shaders = FGLSL::GenerateShaders(fglsl);
+        assert(shaders.shaders.size() == 1);
+        assert(shaders.shaders[0].code.length() == 179);
+
+        auto fshader = shaders.GetShader();
+        assert(fshader->code.length() == 179);
+
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", true);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 179);
+
+
+        fglsl.ClearValues();
+        fglsl.SetCondition("LIGHTS", false);
+        shaders = FGLSL::GenerateShaders(fglsl);
+        assert(shaders.shaders.size() == 1);
+        assert(shaders.shaders[0].code.length() == 179);
+
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", true);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 179);
+
+
+        fglsl.ClearValues();
+        fglsl.SetCondition("LIGHTS", false);
+        fglsl.SetCondition("MATERIALS", false);
+        shaders = FGLSL::GenerateShaders(fglsl);
+        assert(shaders.shaders.size() == 1);
+        assert(shaders.shaders[0].code.length() == 179);
+
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", true);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 179);
+
+
+        fglsl.ClearValues();
+        fglsl.SetCondition("LIGHTS", true);
+        fglsl.SetCondition("MATERIALS", false);
+        shaders = FGLSL::GenerateShaders(fglsl);
+        assert(shaders.shaders.size() == 1);
+        assert(shaders.shaders[0].code.length() == 159);
+
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(shaders.shaders[0].code.length() == 159);
+        shaders.SetConditional("MATERIALS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 159);
+        shaders.SetConditional("MATERIALS", true);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+
+
+        fglsl.ClearValues();
+        fglsl.SetCondition("LIGHTS", true);
+        fglsl.SetCondition("LIGHTS", false);
+        fglsl.SetCondition("MATERIALS", false);
+        shaders = FGLSL::GenerateShaders(fglsl);
+        assert(shaders.shaders.size() == 2);
+        assert(shaders.shaders[0].code.length() == 159);
+        assert(shaders.shaders[1].code.length() == 179);
+
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 159);
+        shaders.SetConditional("MATERIALS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(shaders.shaders[0].code.length() == 159);
+        shaders.SetConditional("MATERIALS", true);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 179);
+
+
+
+        fglsl.ClearValues();
+        fglsl.SetCondition("LIGHTS", false);
+        fglsl.SetCondition("MATERIALS", true);
+        shaders = FGLSL::GenerateShaders(fglsl);
+        assert(shaders.shaders.size() == 1);
+        assert(shaders.shaders[0].code.length() == 193);
+
+        shaders.SetConditional("MATERIALS", true);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 193);
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", true);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 193);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+
+
+        fglsl.ClearValues();
+        fglsl.SetCondition("LIGHTS", false);
+        fglsl.SetCondition("MATERIALS", true);
+        fglsl.SetCondition("MATERIALS", false);
+        shaders = FGLSL::GenerateShaders(fglsl);
+        assert(shaders.shaders.size() == 2);
+        assert(shaders.shaders[0].code.length() == 193);
+        assert(shaders.shaders[1].code.length() == 179);
+
+
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 179);
+        shaders.SetConditional("MATERIALS", true);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 193);
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", true);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 193);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 179);
+
+
+
+        fglsl.ClearValues();
+        fglsl.SetCondition("LIGHTS", true);
+        fglsl.SetCondition("MATERIALS", true);
+        shaders = FGLSL::GenerateShaders(fglsl);
+        assert(shaders.shaders.size() == 1);
+        assert(shaders.shaders[0].code.length() == 173);
+
+
+
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 173);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", true);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader == NULL);
+
+
+        fglsl.ClearValues();
+        fglsl.SetCondition("LIGHTS", true);
+        fglsl.SetCondition("LIGHTS", false);
+        fglsl.SetCondition("MATERIALS", true);
+        shaders = FGLSL::GenerateShaders(fglsl);
+        assert(shaders.shaders.size() == 2);
+        assert(shaders.shaders[0].code.length() == 173);
+        assert(shaders.shaders[1].code.length() == 193);
+
+
+
+        fglsl.ClearValues();
+        fglsl.SetCondition("LIGHTS", true);
+        fglsl.SetCondition("LIGHTS", false);
+        fglsl.SetCondition("MATERIALS", true);
+        fglsl.SetCondition("MATERIALS", false);
+        shaders = FGLSL::GenerateShaders(fglsl);
+        assert(shaders.shaders.size() == 4);
+        assert(shaders.shaders[0].code.length() == 173);
+        assert(shaders.shaders[1].code.length() == 193);
+        assert(shaders.shaders[2].code.length() == 159);
+        assert(shaders.shaders[3].code.length() == 179);
+
+
+
+        fshader = shaders.GetShader();
+
+        shaders.SetConditional("MATERIALS", true);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 193);
+
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 173);
+
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", true);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 159);
+
+        shaders.SetConditional("MATERIALS", true);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 193);
+
+        shaders.SetConditional("MATERIALS", false);
+        shaders.SetConditional("LIGHTS", false);
+        fshader = shaders.GetShader();
+        assert(fshader->code.length() == 179);
+    }
+
+
+
+
+
+
+
+
+
+
+
     {
         auto fglsl = FGLSL::Preprare("define.comp");
         fglsl.SetValue("TEST_COUNT", "20");
@@ -672,7 +1060,6 @@ int main() {
     {
         auto fglsl = FGLSL::Preprare("multi_include_test.comp");
         auto shaders = FGLSL::GenerateShaders(fglsl);
-        std::cout << shaders.shaders[0].code.length();
         assert(shaders.shaders.size() == 1);
         assert(shaders.shaders[0].code.length() == 119);
     }

@@ -56,8 +56,8 @@ namespace FGLSL {
             }
         };
         struct Range {
-            int start, end;
-            Range(int start, int end) : start(start), end(end) {}
+            int start, else_p, end;
+            Range(int start, int else_p, int end) : start(start), else_p(else_p), end(end) {}
         };
 
         struct FGSLTokenResult {
@@ -153,7 +153,7 @@ namespace FGLSL {
 
                     std::string token = l.substr(0, l.find(" "));
 
-                    if (token == "include") {
+                    if (token == "INCLUDE") {
                         std::string shader = l.substr(l.find(" ") + 1);
                         auto curDir = directory.append(shader);
                         for (auto cl : Resolve(ReadShader(curDir), curDir.parent_path())) {
@@ -197,7 +197,7 @@ namespace FGLSL {
             if (conditionals) {
                 std::vector<Combination> c;
                 if (i >= cond.size()) {
-                    if(cond.size() > 0)
+                    if (cond.size() > 0)
                         return c;
                     return GetCombinations(0, tokens, cond, false);
                 }
@@ -386,11 +386,11 @@ namespace FGLSL {
                                     }
                                 }
                             }
-                            if(!foundP){
-                                if(c.active || foundN)
+                            if (!foundP) {
+                                if (c.active || foundN)
                                     found = false;
                             }
-                                
+
                         }
                         if (found) {
                             for (auto condition : s.conditions) {
@@ -439,7 +439,7 @@ namespace FGLSL {
                 l.erase(0, 3);
 
                 std::string token = l.substr(0, l.find(" "));
-                if (token == "define") {
+                if (token == "DEFINE") {
                     std::string right_hand = l.substr(l.find(" ") + 1);
                     std::string identifier = right_hand.substr(0, right_hand.find(" "));
                     std::string value = right_hand.substr(right_hand.find(" ") + 1);
@@ -457,7 +457,7 @@ namespace FGLSL {
                     bool found = false;
                     for (int j = 0; j < conditionals.size(); j++) {
                         if (conditionals[j].name == right_hand) {
-                            conditionals[j].ranges.push_back(Range(i, 0));
+                            conditionals[j].ranges.push_back(Range(i, -1, 0));
                             open.push_back(j);
                             found = true;
                             break;
@@ -465,10 +465,15 @@ namespace FGLSL {
                     }
                     if (!found) {
                         auto f = FGLSLConditional(right_hand);
-                        f.ranges.push_back(Range(i, 0));
+                        f.ranges.push_back(Range(i, -1, 0));
                         conditionals.push_back(f);
                         open.push_back(conditionals.size() - 1);
                     }
+                    result.push_back("");
+                }
+                else if (token == "ELSE") {
+                    auto cur = open[open.size() - 1];
+                    conditionals[cur].ranges[conditionals[cur].ranges.size() - 1].else_p = i;
                     result.push_back("");
                 }
                 else if (token == "END_IF") {
@@ -502,7 +507,7 @@ namespace FGLSL {
         if (sh.conditional.size() == 0 && sh.tokens.size() == 0 && combinations.size() == 0)
         {
             GLSLShader sha;
-            
+
             std::string result = "";
             for (int i = 0; i < sh.content.size(); i++) {
                 result += sh.content[i] + "\n";
@@ -542,14 +547,16 @@ namespace FGLSL {
             for (int i = 0; i < sh.content.size(); i++) {
                 bool disabled = false;
                 for (auto cond : c.cond_results) {
-                    if (cond.active) {
-                        continue;
-                    }
                     for (auto fullCond : sh.conditional) {
                         if (fullCond.name == cond.name) {
                             for (auto range : fullCond.ranges) {
                                 if (range.start <= i && range.end >= i) {
-                                    disabled = true;
+                                    if (cond.active && range.else_p != -1 && range.else_p <= i) {
+                                        disabled = true;
+                                    }
+                                    if (!cond.active && ( range.else_p >= i || range.else_p == -1)) {
+                                        disabled = true;
+                                    }
                                     break;
                                 }
                             }

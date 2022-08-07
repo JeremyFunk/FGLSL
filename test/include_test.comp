@@ -1,6 +1,6 @@
 #version 330
 
-//$include include_part.comp
+//$INCLUDE include_part.comp
 
 void main(){
 }

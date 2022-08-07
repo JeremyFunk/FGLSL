@@ -3,4 +3,4 @@ struct Material{
     vec3 color;
     float diffuse;
 };
-//$include include_part.comp
+//$INCLUDE include_part.comp
