@@ -1,0 +1,25 @@
+#version 330
+
+//$IF LIGHTS
+struct Light{
+    vec3 color;
+};
+//$END_IF
+
+//$IF MATERIALS
+struct Materials{
+    vec3 color;
+    float diffuse;
+};
+//$END_IF
+
+
+void main(){
+    //$IF LIGHTS
+    vec3 test;
+    //$END_IF
+    //$IF MATERIALS
+    vec3 test2;
+    vec3 test3;
+    //$END_IF
+}

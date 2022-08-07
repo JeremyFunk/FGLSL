@@ -1,0 +1,6 @@
+#version 330
+
+//$include multi_include_part.comp
+
+void main(){
+}

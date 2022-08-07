@@ -1,0 +1,11 @@
+#version 330
+
+//$IF LIGHTS
+struct Light{
+    vec3 color;
+};
+//$END_IF
+
+void main(){
+    
+}
